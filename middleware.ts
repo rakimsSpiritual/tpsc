@@ -1,18 +1,10 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+// middleware.ts
+import { authMiddleware } from "@clerk/nextjs";
 
-const protectedRoute = createRouteMatcher([
-  '/',
-  '/upcoming',
-  '/meeting(.*)',
-  '/previous',
-  '/recordings',
-  '/personal-room',
-]);
-
-export default clerkMiddleware((auth, req) => {
-  if (protectedRoute(req)) auth().protect();
+export default authMiddleware({
+  publicRoutes: ["/", "/upcoming", "/meeting(.*)", "/previous", "/recordings", "/personal-room" ], // These pages won't require sign-in
 });
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ["/((?!_next|.*\\..*).*)"], // Apply middleware to all app routes
 };
