@@ -7,7 +7,7 @@ export default authMiddleware({
     "/previous",
     "/recordings",
     "/personal-room",
-    /^\/meeting(\/.*)?$/ // Regex for any /meeting or /meeting/*
+      // Regex for any /meeting or /meeting/*
   ],
 });
 
