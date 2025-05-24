@@ -1,16 +1,18 @@
-import { authMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export default authMiddleware({
-  publicRoutes: [
-    "/",
-    "/upcoming",
-    "/previous",
-    "/recordings",
-    "/personal-room",
-      // Regex for any /meeting or /meeting/*
-  ],
+const protectedRoute = createRouteMatcher([
+  '/',
+  '/upcoming',
+  '/meeting(.*)',
+  '/previous',
+  '/recordings',
+  '/personal-room',
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (protectedRoute(req)) auth().protect();
 });
 
 export const config = {
-  matcher: ["/((?!_next|.*\\..*).*)"], // Apply to all routes except static files
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
